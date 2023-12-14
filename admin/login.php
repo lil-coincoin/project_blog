@@ -44,6 +44,7 @@ if(!empty($_POST["email"]) && !empty($_POST["password"]) ){
 
     $user = $query->fetch();
     if($user && password_verify($mdp, $user['password'])){
+        $_SESSION['user'] = $user;
         header('Location: dashboard.php');
         exit;
     }else{

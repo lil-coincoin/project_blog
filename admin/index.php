@@ -25,7 +25,7 @@ session_start();
         </div>
         <?php
             unset($_SESSION['error']);
-            endif
+            endif;
         ?>
         <form action="login.php" method="post">
             <div class="mb-3">
