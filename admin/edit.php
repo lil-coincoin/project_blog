@@ -95,8 +95,8 @@ $articlesCategories = $query->fetchAll(PDO::FETCH_COLUMN);
                 <textarea class="form-control" id="contenu" rows="8" name="contenu"><?php echo $articles['content']; ?></textarea>
             </div>
             <div class="mb-3">
-                <label for="couverture" class="form-label">Couverture</label>
-                <input class="form-control" type="file" id="couverture" name="couverture">
+                <label for="cover" class="form-label">Couverture</label>
+                <input class="form-control" type="file" id="cover" name="cover">
             </div>
             <div class="mb-3">
                 <label for="categorie" class="form-label">Catégories</label>
