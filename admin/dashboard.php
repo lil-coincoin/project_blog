@@ -12,10 +12,14 @@ require_once '../connexion.php';
 $bdd = connectBdd('root','', 'blog_db');
 
 //Selectionne tous les articles et leurs catégories
-$query = $bdd -> query("SELECT articles.id, articles.title, articles.publication_date, GROUP_CONCAT(categories.name, ' ') AS categories FROM articles
+$query = $bdd -> prepare("SELECT articles.id, articles.title, articles.publication_date, GROUP_CONCAT(categories.name, ' ') AS categories FROM articles
 LEFT JOIN articles_categories ON articles_categories.article_id = articles.id
 LEFT JOIN categories ON categories.id = articles_categories.category_id
+WHERE user_id = :id
 GROUP BY id;");
+
+$query->bindValue(':id', $_SESSION['user']['id']);
+$query->execute();
 
 //Retourne tous les résultats trouvés par la requete SQL ci-dessus
 $results = $query->fetchAll();
@@ -69,7 +73,7 @@ $results = $query->fetchAll();
                 <td><?php echo $data['categories']; ?></td>
                 <td><?php echo DateTime::createFromFormat('Y-m-d H:i:s', $data['publication_date'])->format('d-m-Y');?></td>
                 <td>
-                    <a href="#" class="btn btn-light btn-sm">Editer</a>
+                    <a href="<?php echo "edit.php/?id={$data['id']}"; ?>" class="btn btn-light btn-sm">Editer</a>
                     <a href="#" class="btn btn-danger btn-sm">Supprimer</a>
                 </td>
                 </tr>
