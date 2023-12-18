@@ -74,7 +74,7 @@ $results = $query->fetchAll();
                 <td><?php echo DateTime::createFromFormat('Y-m-d H:i:s', $data['publication_date'])->format('d-m-Y');?></td>
                 <td>
                     <a href="<?php echo "edit.php/?id={$data['id']}"; ?>" class="btn btn-light btn-sm">Editer</a>
-                    <a href="#" class="btn btn-danger btn-sm">Supprimer</a>
+                    <a href="<?php echo "delete_article.php/?id={$data['id']}"; ?>" class="btn btn-danger btn-sm">Supprimer</a>
                 </td>
                 </tr>
                 <?php
