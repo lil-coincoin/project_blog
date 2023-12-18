@@ -50,5 +50,5 @@ $query->execute();
 
 $_SESSION['success'] = "L'article a été correctement supprimé";
 
-header('Location: dashboard.php');
+header('Location: http://php.test/projet_blog/admin/dashboard.php');
 ?>

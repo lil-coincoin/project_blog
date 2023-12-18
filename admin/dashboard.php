@@ -12,11 +12,17 @@ require_once '../connexion.php';
 $bdd = connectBdd('root','', 'blog_db');
 
 //Selectionne tous les articles et leurs catégories
-$query = $bdd -> prepare("SELECT articles.id, articles.title, articles.publication_date, GROUP_CONCAT(categories.name, ' ') AS categories FROM articles
-LEFT JOIN articles_categories ON articles_categories.article_id = articles.id
-LEFT JOIN categories ON categories.id = articles_categories.category_id
+$query = $bdd -> prepare("
+SELECT 
+    articles.id, articles.title, articles.publication_date, 
+    GROUP_CONCAT(categories.name SEPARATOR ', ') AS categories 
+FROM articles 
+LEFT JOIN articles_categories ON articles_categories.article_id = articles.id 
+LEFT JOIN categories ON categories.id = articles_categories.category_id 
 WHERE user_id = :id
-GROUP BY id;");
+GROUP BY articles.id
+ORDER BY articles.publication_date DESC 
+");
 
 $query->bindValue(':id', $_SESSION['user']['id']);
 $query->execute();
@@ -51,7 +57,22 @@ $results = $query->fetchAll();
             </div>
         </div>
     </nav>
-    <div class="container p-3">
+    <div class="container mt-5">
+
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="mb-4">Liste des articles</h2>
+            <a href="add.php" class="btn btn-success">Nouvel article</a>
+        </div>
+
+        <!-- Message de succès -->
+        <?php if(isset($_SESSION['success'])): ?>
+            <div class="alert alert-success">
+                <?php
+                echo $_SESSION['success'];
+                unset($_SESSION['success']);
+                ?>
+            </div>
+        <?php endif; ?>
 
         <table class="table">
             <thead>
@@ -74,7 +95,7 @@ $results = $query->fetchAll();
                 <td><?php echo DateTime::createFromFormat('Y-m-d H:i:s', $data['publication_date'])->format('d-m-Y');?></td>
                 <td>
                     <a href="<?php echo "edit.php/?id={$data['id']}"; ?>" class="btn btn-light btn-sm">Editer</a>
-                    <a href="<?php echo "delete_article.php/?id={$data['id']}"; ?>" class="btn btn-danger btn-sm">Supprimer</a>
+                    <a href="<?php echo "delete_article.php/?id={$data['id']}"; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?');">Supprimer</a>
                 </td>
                 </tr>
                 <?php
